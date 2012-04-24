@@ -11,6 +11,10 @@ class SingletonModelAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         """ Singleton pattern: prevent addition of new objects """
         return False
+
+    def has_delete_permission(self, request, obj=None):
+        """ Singleton pattern: prevent deletion of THE object """
+        return False
         
     def get_urls(self):
         from django.conf.urls.defaults import patterns, url
@@ -30,7 +34,7 @@ class SingletonModelAdmin(admin.ModelAdmin):
             url(r'^$',
                 wrap(self.change_view),
                 {'object_id': '1'},
-                name='%s_%s_change' % info),
+                name='%s_%s_changelist' % info),
         )
         return urlpatterns
         
@@ -46,7 +50,7 @@ class SingletonModelAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(request.path)
         else:
             self.message_user(request, msg)
-            return HttpResponseRedirect("../../")
+            return HttpResponseRedirect("../")
             
     def change_view(self, request, object_id, extra_context=None):
         if object_id=='1':
