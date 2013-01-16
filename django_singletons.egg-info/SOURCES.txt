@@ -1,0 +1,12 @@
+MANIFEST.in
+README.txt
+setup.py
+django_singletons.egg-info/PKG-INFO
+django_singletons.egg-info/SOURCES.txt
+django_singletons.egg-info/dependency_links.txt
+django_singletons.egg-info/not-zip-safe
+django_singletons.egg-info/top_level.txt
+singleton_models/__init__.py
+singleton_models/admin.py
+singleton_models/models.py
+singleton_models/templates/admin/singleton_models/change_form.html
