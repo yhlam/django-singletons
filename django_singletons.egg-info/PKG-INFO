@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: django-singletons
-Version: 0.1.6-1
+Version: 0.1.6-1-ionata2
 Summary: Reusable singleton models for Django
 Home-page: http://github.com/tttallis/django-singletons
 Author: Thomas Ashelford
