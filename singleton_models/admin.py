@@ -4,10 +4,11 @@ from django.utils.encoding import force_unicode
 from django.http import HttpResponseRedirect
 from django.utils.functional import update_wrapper
 
+
 class SingletonModelAdmin(admin.ModelAdmin):
 
     change_form_template = "admin/singleton_models/change_form.html"
-    
+
     def has_add_permission(self, request):
         """ Singleton pattern: prevent addition of new objects """
         return False
@@ -15,7 +16,7 @@ class SingletonModelAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """ Singleton pattern: prevent deletion of THE object """
         return False
-        
+
     def get_urls(self):
         from django.conf.urls import patterns, url
 
@@ -26,18 +27,20 @@ class SingletonModelAdmin(admin.ModelAdmin):
 
         info = self.model._meta.app_label, self.model._meta.module_name
 
-        urlpatterns = patterns('',
+        urlpatterns = patterns(
+            '',
             url(r'^history/$',
                 wrap(self.history_view),
-                {'object_id': '1'},
+                {u'object_id': 1},
                 name='%s_%s_history' % info),
             url(r'^$',
                 wrap(self.change_view),
-                {'object_id': '1'},
+                {u'object_id': 1},
                 name='%s_%s_changelist' % info),
         )
+
         return urlpatterns
-        
+
     def response_change(self, request, obj):
         """
         Determines the HttpResponse for the change_view stage.
@@ -45,19 +48,19 @@ class SingletonModelAdmin(admin.ModelAdmin):
         opts = obj._meta
 
         msg = _('%(obj)s was changed successfully.') % {'obj': force_unicode(obj)}
-        if request.POST.has_key("_continue"):
+        if "_continue" in request.POST:
             self.message_user(request, msg + ' ' + _("You may edit it again below."))
             return HttpResponseRedirect(request.path)
         else:
             self.message_user(request, msg)
             return HttpResponseRedirect("../")
-            
-    def change_view(self, request, object_id, extra_context=None):
-        if object_id=='1':
-            self.model.objects.get_or_create(pk=1)
-        return super(SingletonModelAdmin, self).change_view(
-            request,
-            object_id,
-            extra_context=extra_context,
-        )
 
+    def change_view(self, request, object_id, extra_context=None):
+        if not isinstance(object_id, basestring):
+            object_id = unicode(object_id)
+
+        if object_id == u'1':
+            self.model.objects.get_or_create(pk=1)
+
+        return super(SingletonModelAdmin, self).change_view(
+            request, object_id, extra_context)
