@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext as _
 from django.utils.encoding import force_unicode
 from django.http import HttpResponseRedirect
-from django.utils.functional import update_wrapper
+from functools import wraps
 
 
 def singleton_view(fn_name):
@@ -34,9 +34,10 @@ class SingletonModelAdmin(admin.ModelAdmin):
         from django.conf.urls import patterns, url
 
         def wrap(view):
+            @wraps(view)
             def wrapper(*args, **kwargs):
                 return self.admin_site.admin_view(view)(*args, **kwargs)
-            return update_wrapper(wrapper, view)
+            return wrapper
 
         info = self.model._meta.app_label, self.model._meta.module_name
 
