@@ -1,2 +1,3 @@
 include README.txt
-include singleton_models/templates/admin/singleton_models/change_form.html
+recursive-include singleton_models *.py
+recursive-include singleton_models/templates *.html
